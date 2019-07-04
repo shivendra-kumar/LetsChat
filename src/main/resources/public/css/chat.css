@@ -1,0 +1,173 @@
+html, body{
+  height: 100%;
+  margin:0%;
+  overflow: hidden;
+  background-image: url('/css/bg.jpg');
+}
+div.letsChat {
+    min-height: 100vh;
+    padding: 15px;
+    flex-flow: column;
+    justify-content: space-between;
+    padding-right: 3%;
+}
+.unreadMsg{
+	background-color: #e6ff59 !important;
+	color: #000 !important;
+}
+
+.msg_body{
+	font-size: 1.3em;
+}
+
+.msg_time{
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+#msgs_recieved span.recieved_text {
+    background: #E0F7FA;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#msgs_recieved span.sent_text {
+    background: #fff1b5;
+    margin-left: auto;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: block;
+    margin-bottom: 10px;
+}
+#msgs_sent {
+	display: none;
+}
+#msgs_sent p#msg_txt {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    width: 90%;
+    margin: 0;
+    padding: 3px 39px;
+}
+
+.btn {
+    border: 1px solid #dddddd;
+    padding: 3px 39px;
+    margin: 0;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #ffffff;
+    background: #8BC34A;
+}
+
+div#msgs_recieved {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-flow: column;
+}
+
+#infoOnLogin {
+	position: absolute;
+	top: 45%;
+	left: 40%;
+}
+
+div#msgs_sent {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidenav {
+  height: 100%;
+  background-image: linear-gradient(-90deg, #3588fc, #66a6ff);
+  overflow-x: hidden;
+  padding-top: 10%;
+
+}
+.sidenav strong, .mininav strong{
+  font-size: 1.8em;
+  color: #fff;
+}
+.usersList{
+  margin-top: 10%;
+}
+.usersList li{
+  margin: 2%;
+  display: block;
+  padding: 5%;
+  background-color: #fff;
+  color: #66a6ff;
+  font-size: 1.2em;
+  border-radius: 4%;
+  cursor: pointer;
+}
+#messages{
+  max-height: 80%;
+  background: transparent;
+}
+.msg_footer{
+  height: 15%;
+  position: fixed;
+  background: transparent;
+  bottom:0%;
+  padding-top: 1.5%;
+  margin-left:4%;
+  margin-bottom: 2%;
+}
+.msg_footer input[type="text"]{
+  padding: 0.5%;
+  width: 60%;
+  color: #3588fc;
+  border: #3588fc;
+}
+.msg_footer button{
+  background-color: #3588fc;
+  color: #fff;
+}
+#msg_form{
+	width: 100%;
+}
+.card-footer{
+  background-image: linear-gradient(-90deg, #89f7fe, #66a6ff);
+  color: white;
+}
+
+.mininav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-image: linear-gradient(-90deg, #3588fc, #66a6ff);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 10%;
+  text-align:center;
+}
+
+.mininav .closebtn {
+  position: absolute;
+  text-decoration: none;
+  top: 1%;
+  right: 10%;
+  font-size: 1.5em;
+  color: #fff;
+}
+.minicontrol{
+  color:#66a6ff;
+  position: fixed;
+  font-size: 1.5em;
+  top:1%;
+  right:10%;
+  cursor: pointer;
+}
+@media screen and (max-width: 768px) {
+  .msg_footer input[type="text"] {
+      width: 86%;
+  }
+}

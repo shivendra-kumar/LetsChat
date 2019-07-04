@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/chat.css">
+  </head>
+  <body>
+    <div class="row content h-100" style="height:100%;">
+      <div class="col-md-3 d-sm-none d-none d-md-block text-center sidenav  h-100" style="min-height: 100%;overflow-y: scroll;">
+        <strong>People In Room</strong><br>
+        <div class="usersList">
+        </div>
+      </div>
+      <div class="col-md-9 col-sm-12  h-100 letsChat"  style="padding-top: 5%;">
+        <span class="minicontrol d-block d-sm-block d-md-none" onclick="openNav()">&#9776;</span>
+        <div id="msgs_recieved">
+        </div>
+        <div class="container-fluid msg_footer" id="msgs_sent">
+          <form id="msg_form">
+            <input type="text" class="form-control" id="msg_txt" id="msg" placeholder="Type A Message" autofocus autocomplete="off">
+            <br>
+            <button type="submit" class="btn" id="send_msg" onclick="javascript:void(0)">Send Message</button><br>
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+    <div id="mySidenav" class="mininav text-center hidden-md-up">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <strong>People In Room</strong><br>
+      <div class="usersList">
+      </div>
+    </div>
+
+    <script id="message-template" type="text/template">
+      <li style="margin-bottom:2%;">
+
+        <div class="card" style="display:inline-block;border: 2px #66a6ff solid;">
+          <div class="card-body">
+            <h5 class="card-title"><strong>{{from}}</strong></h5>
+            <p class="card-text">{{text}}</p>
+          </div>
+          <div class="card-footer">
+            {{createdAt}}
+          </div>
+        </div>
+
+      </li>
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var currentRoomName = undefined;
+    </script>
+  
+   
+    <script type="text/javascript" src="/js/subscribe.js"></script>
+    <script type="text/javascript" src="/js/chat.js"></script>
+  </body>
+</html>
