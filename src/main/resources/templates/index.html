@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/css/chat.css">
   </head>
+ 
+ 
   <body>
     <div class="row content h-100" style="height:100%;">
       <div class="col-md-3 d-sm-none d-none d-md-block text-center sidenav  h-100" style="min-height: 100%;overflow-y: scroll;">
@@ -31,7 +33,7 @@
           <form id="msg_form">
             <input type="text" class="form-control" id="msg_txt"  placeholder="Type A Message" autofocus autocomplete="off">
             <br>
-            <button type="button" class="btn" id="send_msg" onclick="javascript:void(0)">Send Message</button><br>
+             <button type="button" class="btn" id="send_msg" onclick="javascript:void(0)">Send Message</button><br>
           </form>
         </div>
       </div>
@@ -50,6 +52,7 @@
       var currentUser = undefined;
       var chatPartner = undefined;
     </script>
+    
   
    
     <script type="text/javascript" src="/public/js/subscribe.js"></script>
@@ -59,7 +62,7 @@
     <!--  websockets -->
     
     <div class="events"></div>
-<script>
+<!-- <script>
     var clientWebSocket = new WebSocket("ws://localhost:8080/event-emitter");
     clientWebSocket.onopen = function() {
         console.log("clientWebSocket.onopen", clientWebSocket);
@@ -81,7 +84,7 @@
     function events(responseEvent) {
         document.querySelector(".events").innerHTML += responseEvent + "<br>";
     }
-</script>
+</script> -->
     
 
   </body>

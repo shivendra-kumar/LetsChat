@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +32,12 @@ import com.letschat.entity.Message;
 import com.letschat.entity.User;
 import com.letschat.repository.ReactiveMessageRepository;
 import com.letschat.repository.ReactiveUserAccountRepository;
+import com.letschat.session.LoggedInUsersService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @RestController
 @RequestMapping(path = "/react")
@@ -50,6 +55,7 @@ public class ChatController {
 
 	@Autowired
 	private ReactiveMessageRepository messageRepository;
+	
 
 	@PostMapping(path = "/sendMessage")
 	public void sendMessage(@RequestBody String message, @AuthenticationPrincipal UserDetails userDetails)
@@ -65,6 +71,7 @@ public class ChatController {
 		ZonedDateTime dateAndTime = ZonedDateTime.ofInstant(now, zoneId);
 
 		Message messageObject = new Message(username, currentuserName, msg, dateAndTime.toEpochSecond());
+		
 
 		userFluxSinkMap.get(currentuserName).next(stringToSSE(objectToJson(messageObject), "MESSAGE_EVENT"));
 		FluxSink<ServerSentEvent<String>> sink = userFluxSinkMap.get(username);
@@ -98,20 +105,23 @@ public class ChatController {
 
 	@PostMapping(path = "/populateChat")
 	public void populateUserChat(@RequestBody String sender,
-			@AuthenticationPrincipal UserDetails userDetails) {
+			@AuthenticationPrincipal Mono<UserDetails> userDetails) {
 
-		String currentUserName = userDetails.getUsername();
-		Flux<Message> recievedMessagesFlux =  messageRepository.findAllBySenderAndRecepient(sender, currentUserName);
-		Flux<Message> sentMessagesFlux = messageRepository.findAllBySenderAndRecepient(currentUserName, sender);
+		Mono<String> senderName = Mono.just(sender);
+		Mono<String> currentUserName = userDetails.map(UserDetails::getUsername);
+
+		Flux<Message> recievedMessagesFlux = messageRepository.findAllBySenderAndRecepient(senderName, currentUserName);
+		Flux<Message> sentMessagesFlux = messageRepository.findAllBySenderAndRecepient(currentUserName, senderName);
 		Flux<Message> mergedFlux = Flux.merge(recievedMessagesFlux, sentMessagesFlux);
-		FluxSink<ServerSentEvent<String>> sink = userFluxSinkMap.get(currentUserName);
-		
-		
-		
-		mergedFlux.map(message -> sink.next(stringToSSE(objectToJson(message), "MESSAGE_EVENT"))).subscribe();
-		
-		
-	
+		currentUserName
+				.map(userName -> userFluxSinkMap.get(userName)).map(sink -> mergedFlux
+						.map(message -> sink.next(stringToSSE(objectToJson(message), "MESSAGE_EVENT"))).subscribe())
+				.subscribe();
+
+		recievedMessagesFlux.flatMap(message -> {
+			message.setIsSeen(Boolean.TRUE);
+			return Flux.empty();
+		}).subscribe();
 
 	}
 	
@@ -131,14 +141,50 @@ public class ChatController {
 	
 	
 	@GetMapping(path = "/getCurrentUser")
-	public Mono<String> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-		return Mono.just(userDetails.getUsername());
+	public Mono<String> getCurrentUser(@AuthenticationPrincipal Mono<UserDetails> userDetails) {
+		return userDetails.map(UserDetails::getUsername);
 	}
+	
+	/*@PostMapping(path = "/markMessagesAsSeen")
+	public void markMessagesAsSeen(@AuthenticationPrincipal UserDetails userDetails,@RequestBody String sender) {
+		
+		Flux<Message> recievedMessagesFlux =  messageRepository.findAllBySenderAndRecepient(sender, userDetails.getUsername());
+		
+		messageRepository.saveAll(recievedMessagesFlux.map(message -> {
+			message.setIsSeen(Boolean.TRUE);
+		return message;
+		 
+	})).subscribe();
+	}*/
+	
+	
+	
+	@GetMapping(path = "/getLoggedInUsers")
+	public Mono<Set<String>> getLoggedInUsers() {
+		Mono<Set<String>> blockingWrapper = Mono.fromCallable(() -> { 
+		    return LoggedInUsersService.getLoggedInUserMap().entrySet().parallelStream()
+		    		.filter(Map.Entry::getValue).map(entry -> entry.getKey())
+		    		.collect(Collectors.toSet());
+		});
+		return blockingWrapper.subscribeOn(Schedulers.elastic());
+		
+		
+	}
+	
 	
 
 	private Mono<Message> saveMessage(Message message) {
 
 		return messageRepository.save(message);
 	}
-
+	
+	@GetMapping(path = "/mongoTest/{sender}/{receiver}")
+	public Flux<Message>  mongoTest(@PathVariable("sender") String sender,@PathVariable("receiver") String receiver ) {
+		return messageRepository.findAllBySenderAndRecepient(Mono.just(sender), Mono.just(receiver));
+		
+		
+	}
+	
+	
+	
 }

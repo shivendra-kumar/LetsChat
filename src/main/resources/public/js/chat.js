@@ -17,6 +17,7 @@ $(window).on('load',function(){
 	$('#send_msg').click(function(e){
 		e.preventDefault();
 		sendMessage();
+		$('#msg_txt').val('')
 	});
 	$('#msg_txt').on('keydown',function(event){
 		if(event.keyCode==13){

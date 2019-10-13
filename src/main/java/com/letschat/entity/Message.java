@@ -18,9 +18,22 @@ public class Message {
 	private String sender;
 	private String messageBody;
 	private Long date;
+	private Boolean isSeen = Boolean.FALSE;
 	
 	
 	
+	public String getMessageId() {
+		return messageId;
+	}
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
+	}
+	public Boolean getIsSeen() {
+		return isSeen;
+	}
+	public void setIsSeen(Boolean isSeen) {
+		this.isSeen = isSeen;
+	}
 	public Long getDate() {
 		return date;
 	}

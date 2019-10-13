@@ -9,20 +9,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.ViewResolverRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.thymeleaf.spring5.ISpringWebFluxTemplateEngine;
 import org.thymeleaf.spring5.SpringWebFluxTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.reactive.ThymeleafReactiveViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import com.letschat.handlers.CustomLoginSuccessHandler;
+import com.letschat.handlers.CustomLogoutHandler;
 import com.letschat.repository.ReactiveUserAccountRepository;
+
+import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -31,8 +37,9 @@ public class WebFluxConfig implements WebFluxConfigurer,ApplicationContextAware{
 	
 	private ApplicationContext ctx;
 	
-	 @Autowired
+		@Autowired
 	  private ReactiveUserAccountRepository userRepository;
+	
 	
 	  @Bean
 	    public SpringResourceTemplateResolver thymeleafTemplateResolver() {
@@ -84,7 +91,7 @@ public class WebFluxConfig implements WebFluxConfigurer,ApplicationContextAware{
         return http
             .csrf().disable()
             .authorizeExchange()
-                .pathMatchers("/login", "/logout","/signup","/react/populateUsers","/react/recieveMessage","/react/sendMessage").permitAll()
+                .pathMatchers("/login", "/logout","/signup").permitAll()
                 .pathMatchers("/i18n/**",
                     "/css/**",
                     "/public/**",
@@ -95,24 +102,34 @@ public class WebFluxConfig implements WebFluxConfigurer,ApplicationContextAware{
                     "/vendor/**","/react/signup","/templates/**","/resources/**","/static/**","classpath:/resources/**").permitAll()
            .anyExchange()
                 .authenticated()
+               /* .and()
+                .oauth2Login()*/
+                
+          
                 .and()
             .formLogin()
                 .loginPage("/login")
+                .authenticationSuccessHandler(new CustomLoginSuccessHandler())
+                .authenticationFailureHandler((webFilterExchange,exception) ->{
+                	return Mono.error(exception);
+                })
                 
                 .and()
             .logout()
-            	
+            .logoutHandler(new CustomLogoutHandler())
                 
                 .and()
            .build();
+        
+     
     }
 
 
-    @Bean
+  /*  @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+*/
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.ctx = applicationContext;
@@ -139,6 +156,14 @@ public class WebFluxConfig implements WebFluxConfigurer,ApplicationContextAware{
 	   @Bean
 	   public ReactiveUserDetailsService  userDetailsService() {
 	     return (username) -> userRepository.findByUsername(username);
+	   }
+	   
+	   @Bean
+	   public WebClient webClient(ReactiveClientRegistrationRepository clientRegistrationRepo,ServerOAuth2AuthorizedClientRepository authorizedClientRepo) {
+	   ServerOAuth2AuthorizedClientExchangeFilterFunction filter = 
+	   new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepo, authorizedClientRepo);
+	 
+	   return WebClient.builder().filter(filter).build();
 	   }
     
 

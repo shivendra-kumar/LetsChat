@@ -2,8 +2,6 @@ package com.letschat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
@@ -13,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.letschat.entity.User;
 import com.letschat.repository.ReactiveUserAccountRepository;
-import com.letschat.userMapping.UserPair;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -48,6 +44,10 @@ public class UserLoginLogoutController {
 
 		String username = map.get("regusername").get(0);
 		String password = map.get("regpassword").get(0);
+		String confirmPassword = map.get("repassword").get(0);
+		if(!password.equals(confirmPassword)) {
+			return Mono.error(new RuntimeException("Passwords do not match!!!"));
+		}
 		User user = new User(username, passwordEncoder.encode(password));
 		userRepository.save(user).subscribe();
 		
