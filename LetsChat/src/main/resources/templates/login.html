@@ -1,0 +1,134 @@
+<!doctype html>
+<html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+  
+  <!-- jQuery 3.4.1 -->
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  
+  <!-- BOOTSTRAP 4.3.1 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity=	"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="/public/css/main.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-social@5.1.1/bootstrap-social.css">
+   
+  
+  
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+  
+ 
+  
+  
+  
+
+  
+  
+  
+  
+	<div class="container h-100">
+		<div class="d-flex justify-content-center form_container">
+			<div class="card mt-5 col-md-4 myForm login_form">
+				<div class="card-header">
+					<h4>Login</h4>
+				</div>
+				<div class="card-body">
+					
+    <form th:action="@{/login}" method="post">
+     <div id="dynamic_container">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text br-15"><i class="fas fa-user"></i></span>
+								</div>
+								<input type="text" placeholder="Username" class="form-control"  id="username" name="username"/>
+							</div>
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text br-15"><i class="fas fa-lock"></i></span>
+								</div>
+								<input type="password" placeholder="Password" class="form-control" "password" id="password" name="password" />
+							</div>
+						</div>
+   
+				</div>
+				<div class="card-footer">
+					<a class="btn btn-secondary btn-sm flip_card" href="javascript:void(0)" id="sign_up"><i class="fas fa-user-plus"></i> Sign Up</a>
+					<button type="submit" class="btn btn-success btn-sm float-right submit_btn"><i class="fas fa-arrow-alt-circle-right"></i> Submit</button>
+				</div>
+			</div>
+			 
+  			  </form>
+			<div class="card mt-5 col-md-4 myForm signup_form">
+				<div class="card-header">
+					<h4>Sign up</h4>
+				</div>
+				<div class="card-body">
+					 <form th:action="@{/signup}" method="post">
+    
+						<div id="dynamic_container">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text br-15"><i class="fas fa-user"></i></span>
+								</div>
+								<input type="text" placeholder="Username" class="form-control" id="regusername" name="regusername"/>
+							</div>
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text br-15"><i class="fas fa-lock"></i></span>
+								</div>
+								<input type="password" placeholder="Password" class="form-control" id="regpassword" name="regpassword"/>
+							</div>
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text br-15"><i class="fas fa-lock"></i></span>
+								</div>
+								<input type="password" placeholder="Re-enter Password" class="form-control" id="repassword" name="repassword"/>
+							</div>
+						</div>
+				
+ 
+   
+				</div>
+				<div class="card-footer">
+					<a class="btn btn-secondary btn-sm flip_card" href="javascript:void(0)" id="login_btn"><i class="fas fa-user"></i> Login</a>
+					<button type="submit" class="btn btn-success btn-sm float-right submit_btn"><i class="fas fa-arrow-alt-circle-right"></i> Submit</button>
+				</div>
+			</div>
+			 </form>
+		</div>
+	</div>
+	
+	<!-- <div>
+	<a class="btn btn-block btn-social btn-google" href="/oauth2/authorization/google"><span class="fab fa-google"></span> Sign in with Google</a>
+	</div> -->
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="/public/js/main.js"></script>
+
+</body>
+
+
+
+		
+
+
+</html>
