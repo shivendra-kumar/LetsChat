@@ -8,5 +8,7 @@ Chat Web application which allows users to register themselves and then login. O
 * *Server Sent Events* for asynchronous Server to Client Messaging
 * *Reactive MongoDB* for persisting chats.
 
+## Demo:
+
 ![Chat Application Demo](LetsChat.gif)
 
