@@ -15,7 +15,7 @@ Chat Web application which allows users to register themselves and then login. O
 # Usage:
 * Download the source and build it using ``mvn clean package``
 * Run the application using ``java -jar LetsChat-1.0.jar``
-* Open the browser and go to http:\\localhost:8080
+* Open the browser and go to ``http:\\localhost:8080``
 * Signup on the signup page
 * Login inside the app and start sending messages to whoever you like
 
