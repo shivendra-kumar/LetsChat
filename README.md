@@ -18,6 +18,7 @@ Chat Web application which allows users to register themselves and then login. O
 * Open the browser and go to ``http:\\localhost:8080``
 * Signup on the signup page
 * Login inside the app and start sending messages to whoever you like
+* **Note:** Mongo DB should be up and running on localhost:27017 for this app to work.
 
 ## License:
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
